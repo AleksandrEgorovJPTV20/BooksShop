@@ -3,7 +3,7 @@
 <div class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#" id="book_shop">Магазин обуви</a>
+          <a class="navbar-brand" href="#" id="menu_book_shop">Магазин обуви</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -16,7 +16,7 @@
                  <a class="nav-link d-none" href="#" id="menu_add_book">Добавить книгу</a>
               </li>
               <li class="nav-item">
-                 <a class="nav-link d-none" href="#" id="menu_purchase">Покупки</a>
+                 <a class="nav-link d-none" href="#" id="menu_purchases">Покупки</a>
               </li>
               <li class="nav-item">
                  <a class="nav-link d-none" href="#" id="menu_profile">Профиль</a>

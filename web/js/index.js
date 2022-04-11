@@ -51,9 +51,10 @@ function toggleBtnLogin(){
         toggleShowMenu();
         infoElement.innerHTML = "Вы вышли";
     }else{
-        hiddenBtnLogin();
-        toggleShowMenu();
-        infoElement.innerHTML = "Вы вошли";
+        showLoginForm();
+//        hiddenBtnLogin();
+//        toggleShowMenu();
+//        infoElement.innerHTML = "Вы вошли";
     }
 }
 
@@ -61,12 +62,14 @@ function showBtnLogin(){
     isDebug("Показываем кнопку Входа");
     menuLogin.classList.remove("d-none");
     menuLogout.classList.add("d-none");
+    showLoginForm();
 }
 
 function hiddenBtnLogin(){
     isDebug("Показываем кнопку Выхода");
     menuLogin.classList.add("d-none");
     menuLogout.classList.remove("d-none");
+    showLoginForm();
 }
 
 function toggleShowMenu(){
@@ -98,15 +101,59 @@ function activeBtnMenu(activeMenuBtn){
         isDebug("Добавили active");
         activeMenuBtn.classList.add('active');
     }
-    deactivateMenuBtn(activeMenuBtn)
+    deactivateMenuBtn(activeMenuBtn);
 }
 
 function deactivateMenuBtn(activeMenuBtn){
-    const listNav = document.getElementsByClassName('nav-link')
+    const listNav = document.getElementsByClassName('nav-link');
     for(let i = 0; i < listNav.length; i++){
         if(listNav[i] !== activeMenuBtn && listNav[i].classList.contains('active')){
             listNav[i].classList.remove('active');
             isDebug("Удалили active");
         }
+    }
+}
+function showLoginForm(){
+    const content = document.getElementById('content');
+    content.innerHTML = `
+    <div class="card border-secondary mb-3 mx-auto" style="max-width: 30rem;">
+        <h4 class="card-header w-100 text-center">Авторизация</h4>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="login" class="form-label mt-4">Логин</label>
+            <input type="text" class="form-control" id="login" placeholder="Логин">
+          </div>
+          <div class="form-group">
+            <label for="Password" class="form-label mt-4">Пароль</label>
+            <input type="password" class="form-control" id="Password" placeholder="Пароль">
+          </div>
+          <button id='button_login' type="submit" class="btn btn-primary my-3">войти</button>    
+        </div>
+    </div    
+`;
+    const buttonLogin = document.getElementById("button_login");
+    buttonLogin.addEventListener('click', (e)=> {
+        e.preventDefault();
+        sendCredential();
+    });
+}
+
+function sendCredential(){
+    const login = document.getElementById('login').value;
+    const password = document.getElementById('password').value;
+    const credential = {
+        "login": login,
+        "password": password,
+    }
+    const response = fetch('login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset:utf8'
+        },
+        body: JSON.stringify(credential)
+    });
+    if(response.ok){
+        const result = response.json();
+        document.getElementById('info').innerHTML = result.info;
     }
 }

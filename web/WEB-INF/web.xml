@@ -12,6 +12,7 @@
         <jsp-property-group>
             <display-name>template</display-name>
             <url-pattern>/index.js</url-pattern>
+            <url-pattern>/proba.jsp</url-pattern>
             <url-pattern>/index.html</url-pattern>
             <page-encoding>UTF-8</page-encoding>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>

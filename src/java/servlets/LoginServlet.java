@@ -7,16 +7,14 @@ package servlets;
 
 import entity.Reader;
 import entity.Role;
-import entity.Book;
 import entity.User;
 import entity.UserRoles;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,26 +22,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import session.BookFacade;
 import session.ReaderFacade;
 import session.RoleFacade;
-import session.ReaderFacade;
 import session.UserFacade;
 import session.UserRolesFacade;
 import tools.PasswordProtected;
 
-
-@WebServlet(name = "LoginServlet",loadOnStartup = 1, urlPatterns = {
+@WebServlet(name = "LoginServlet", urlPatterns = {
     "/login",
-    "/registration",
     "/logout",
+    "/registration",
 })
 public class LoginServlet extends HttpServlet {
-    @EJB UserFacade userFacade;
-    @EJB RoleFacade roleFacade;
-    @EJB UserRolesFacade userRolesFacade;
-    @EJB ReaderFacade readerFacade;
-    @EJB BookFacade bookFacade;
+    @EJB private UserFacade userFacade;
+    @EJB private ReaderFacade readerFacade;
+    @EJB private RoleFacade roleFacade;
+    @EJB private UserRolesFacade userRolesFacade;
     
     @Override
     public void init() throws ServletException {
@@ -52,38 +46,38 @@ public class LoginServlet extends HttpServlet {
         Reader reader = new Reader();
         reader.setFirstname("Aleksandr");
         reader.setLastname("Egorov");
-        reader.setPhone("565445676");
+        reader.setPhone("56656545656");
         readerFacade.create(reader);
         User user = new User();
         user.setLogin("admin");
         PasswordProtected passwordProtected = new PasswordProtected();
         String salt = passwordProtected.getSalt();
         user.setSalt(salt);
-        String password = passwordProtected.getProtectedPassword("12345", salt);   
+        String password = passwordProtected.getProtectedPassword("12345", salt);
         user.setPassword(password);
         user.setReader(reader);
         userFacade.create(user);
         Role role = new Role();
-        role.setRoleName("READER");
+        role.setRoleName("USER");
         roleFacade.create(role);
-        UserRoles userRoles = new UserRoles();
-        userRoles.setRole(role);
-        userRoles.setUser(user);
-        userRolesFacade.create(userRoles);
+        UserRoles ur = new UserRoles();
+        ur.setRole(role);
+        ur.setUser(user);
+        userRolesFacade.create(ur);
         role = new Role();
         role.setRoleName("MANAGER");
         roleFacade.create(role);
-        userRoles = new UserRoles();
-        userRoles.setRole(role);
-        userRoles.setUser(user);
-        userRolesFacade.create(userRoles);
+        ur = new UserRoles();
+        ur.setRole(role);
+        ur.setUser(user);
+        userRolesFacade.create(ur);
         role = new Role();
         role.setRoleName("ADMINISTRATOR");
         roleFacade.create(role);
-        userRoles = new UserRoles();
-        userRoles.setRole(role);
-        userRoles.setUser(user);
-        userRolesFacade.create(userRoles);
+        ur = new UserRoles();
+        ur.setRole(role);
+        ur.setUser(user);
+        userRolesFacade.create(ur);
     }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -98,49 +92,54 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String path = request.getServletPath();
         HttpSession session = null;
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        String path = request.getServletPath();
         switch (path) {
             case "/login":
                 JsonReader jsonReader = Json.createReader(request.getReader());
                 JsonObject jsonObject = jsonReader.readObject();
-                String login = jsonObject.getString("login", "");
-                String password = jsonObject.getString("password", "");
+                String login = jsonObject.getString("login","");
+                String password = jsonObject.getString("password","");
                 User authUser = userFacade.findByLogin(login);
                 if(authUser == null){
-                    String json = "{\"info\": \"Нет такого пользователя\"}";
-                    try (PrintWriter out = response.getWriter()){
-                        out.println(json);
+                    job.add("info", "Нет такого пользователя")
+                       .add("auth",false);
+                    try (PrintWriter out = response.getWriter()) {
+                        out.println(job.build().toString());
                     }
                     break;
                 }
                 PasswordProtected pp = new PasswordProtected();
                 password = pp.getProtectedPassword(password, authUser.getSalt());
                 if(!password.equals(authUser.getPassword())){
-                    String json = "{\"info\": \"Неверный пароль\"}";
-                    try (PrintWriter out = response.getWriter()){
-                        out.println(json);
+                    job.add("info", "Неверный пароль")
+                       .add("auth",false);
+                    try (PrintWriter out = response.getWriter()) {
+                        out.println(job.build().toString());
                     }
-                    break;                    
+                    break;
                 }
                 session = request.getSession(true);
                 session.setAttribute("authUser", authUser);
-                String json = "{\"info\": \"Вы вошли как"+authUser.getLogin()+"\"}";
-                try (PrintWriter out = response.getWriter()){
-                    out.println(json);
-                }                
+                job.add("info", "Вы вошли как "+authUser.getLogin())
+                   .add("auth",true);
+                try (PrintWriter out = response.getWriter()) {
+                    out.println(job.build().toString());
+                }
                 break;
             case "/registration":
-                
+               
                 break;
             case "/logout":
                 session = request.getSession(false);
-                if(session != null) {
+                if(session != null){
                     session.invalidate();
                     request.setAttribute("info", "Вы вышли");
                 }
-                request.getRequestDispatcher("/listBooks").forward(request, response);
+                request.getRequestDispatcher("/listAccounts").forward(request, response);
                 break;
+           
         }
     }
 

@@ -1,5 +1,5 @@
 import {loginModule} from './LoginModule.js';
-import {shoeModule} from './ShoeModule.js';
+import {authorModule} from './AuthorModule.js';
 
 class ViewModule {
     showLoginForm(){
@@ -23,39 +23,35 @@ class ViewModule {
         buttonLogin.addEventListener('click', (e)=>{
             e.preventDefault();
             loginModule.sendCredential();
-        })
-    }
-   showNewShoeForm(response){
+        });
+    };
+   showNewAuthorForm(){
         const content = document.getElementById('content');
         content.innerHTML = `
         <div class="card border-secondary mb-3 mx-auto" style="max-width: 30rem;">
             <h3 class="card-header w-100 text-center ">Добавление автор</h3>
             <div class="card-body">
               <div class="form-group">
-                <label for="firstname" class="form-label mt-4">Производитель</label>
-                <input type="text" class="form-control" id="firstname" placeholder="Производитель">
+                <label for="firstname" class="form-label mt-4">Имя</label>
+                <input type="text" class="form-control" id="firstname" placeholder="Имя">
               </div>
               <div class="form-group">
-                <label for="lastname" class="form-label mt-4">Тип</label>
-                <input type="text" class="form-control" id="lastname" placeholder="Тип">
+                <label for="lastname" class="form-label mt-4">Фамилия</label>
+                <input type="text" class="form-control" id="lastname" placeholder="Фамилия">
               </div>
               <div class="form-group">
-                <label for="birth_year" class="form-label mt-4">Цвет</label>
-                <input type="test" class="form-control" id="birth_year" placeholder="Цвет">
+                <label for="birth_year" class="form-label mt-4">Год рождения</label>
+                <input type="test" class="form-control" id="birth_year" placeholder="Год рождения">
               </div>
-              <div class="form-group">
-                <label for="birth_year" class="form-label mt-4">Цвет</label>
-                <input type="test" class="form-control" id="birth_year" placeholder="Цвет">
-              </div
               <button id='btn_add_author' type="submit" class="w-50 btn btn-primary my-3 d-flex justify-content-center mx-auto">Добавить автора</button>
             </div>
         </div>`;
         document.getElementById("btn_add_author").addEventListener('click', (e)=>{
             e.preventDefault();
-            shoeModule.createNewShoe();
+            authorModule.createNewAuthor();
         });
-   }
-};
+   };
+}
 
 const viewModule = new ViewModule();
 export {viewModule};

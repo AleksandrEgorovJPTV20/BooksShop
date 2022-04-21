@@ -12,4 +12,4 @@
     <body>
         <c:import url="/WEB-INF/menu.jsp"></c:import>
         <div class="container-fluid">
-            <p id="info" class="my-2 w-100 d-flex justify-content-center text-info">&nbsp;</p>
+            <p id="info" class="my-3 w-100 d-flex justify-content-center text-info">&nbsp;</p>

@@ -13,6 +13,7 @@ import entity.UserRoles;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jsontools.AuthorJsonBuilder;
 import session.AuthorFacade;
 import session.ReaderFacade;
 import session.RoleFacade;
@@ -33,6 +35,8 @@ import tools.PasswordProtected;
 
 @WebServlet(name = "ManagerServlet", urlPatterns = {
     "/createNewAuthor",
+    "/getListAuthors",
+    "/getAuthor",
 })
 public class ManagerServlet extends HttpServlet {
     @EJB private AuthorFacade authorFacade;
@@ -76,7 +80,29 @@ public class ManagerServlet extends HttpServlet {
                     out.println(job.build().toString());
                 }
                 break;
-           
+            case "/getListAuthors":
+                List<Author> listAuthors = authorFacade.findAll();
+                AuthorJsonBuilder ajb = new AuthorJsonBuilder();
+                job.add("status",true);
+                job.add("info","Создан массив авторов");
+                job.add("authors",ajb.getAuthorsJsonArray(listAuthors));
+                try (PrintWriter out = response.getWriter()) {
+                    out.println(job.build().toString());
+                }
+                break;
+            case "/getAuthor":
+                jsonReader = Json.createReader(request.getReader());
+                jsonObject = jsonReader.readObject();
+                String authorId = jsonObject.getString("authorId","");
+                Author author = authorFacade.find(Long.parseLong(authorId));
+                ajb = new AuthorJsonBuilder();
+                job.add("info", "Редактируем автора: "+author.getFirstname()+" "+author.getLastname());
+                job.add("status", true);
+                job.add("author", ajb.getAuthorJsonObject(author));
+                try (PrintWriter out = response.getWriter()) {
+                    out.println(job.build().toString());
+                }
+                break;
         }
     }
 

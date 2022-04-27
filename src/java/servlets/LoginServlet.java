@@ -27,6 +27,8 @@ import session.RoleFacade;
 import session.UserFacade;
 import session.UserRolesFacade;
 import tools.PasswordProtected;
+import jsontools.RoleJsonBuilder;
+import jsontools.UserJsonBuilder;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {
     "/login",
@@ -120,10 +122,13 @@ public class LoginServlet extends HttpServlet {
                     }
                     break;
                 }
+                Role role = userRolesFacade.getRoleForUser(authUser);
                 session = request.getSession(true);
                 session.setAttribute("authUser", authUser);
                 job.add("info", "Вы вошли как "+authUser.getLogin())
                    .add("auth",true);
+                   .add("user", new UserJsonBuilder().getUserJsonObject(authUser))
+                   .add("role", new RoleJsonBuilder().getRoleJsonObject(role));
                 try (PrintWriter out = response.getWriter()) {
                     out.println(job.build().toString());
                 }

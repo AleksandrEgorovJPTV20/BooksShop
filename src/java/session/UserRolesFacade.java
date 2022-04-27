@@ -98,5 +98,25 @@ public class UserRolesFacade extends AbstractFacade<UserRoles> {
         em.createQuery("DELETE FROM UserRoles userRoles WHERE userRoles.user = :user")
                 .setParameter("user", user)
                 .executeUpdate();
-    }    
+    }
+    public Role getRoleForUser(User user){
+        try {
+            List<String> listRoleNamesForUser = 
+                  em.createQuery("SELECT ur.role.roleName FROM UserRoles ur WHERE ur.user = :user")
+                    .setParameter("user", user)
+                    .getResultList();
+            if(listRoleNamesForUser.contains("ADMINISTRATOR")){
+                Role role = roleFacade.getRoleByName("ADMINISTRATOR");
+                return role;
+            }else if(listRoleNamesForUser.contains("MANAGER")){
+                return roleFacade.getRoleByName("MANAGER");
+            }else if(listRoleNamesForUser.contains("USER")){
+                return roleFacade.getRoleByName("USER");
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }   
+    
 }

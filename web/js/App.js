@@ -103,3 +103,69 @@ function deactiveMenu(activeMenuBtn){
         }
     }
 }
+
+function checkMenu() {
+    const role = null;
+    if(sessionStorage.getItem('role') === null){
+        if(!menuAddAuthor.classList.contains('d-none')) {
+            menuAddAuthor.classList.add('d-none');
+        }
+        if(!menuAddBook.classList.contains('d-none')) {
+            menuAddBook.classList.add('d-none');
+        }
+        if(!menuPurchases.classList.contains('d-none')) {
+            menuPurchases.classList.add('d-none');
+        }
+        if(!menuAddAuthor.classList.contains('d-none')) {
+            menuAddAuthor.classList.add('d-none');
+        }
+        if(!menuProfile.classList.contains('d-none')) {
+            menuProfile.classList.add('d-none');
+        }
+        if(!menuAdminPanel.classList.contains('d-none')) {
+            menuAdminPanel.classList.add('d-none');
+        }
+        if(!menuLogin.classList.contains('d-none')) {
+            menuLogin.classList.remove('d-none');
+        }
+        if(!menuAdminPanel.classList.contains('d-none')) {
+            menuAdminPanel.classList.add('d-none');
+        }
+    }
+    role = sessionStorage.getItem('role');
+    if(role === 'USER'){
+        
+        if(!menuAddAuthor.classList.contains('d-none')) {
+            menuAddAuthor.classList.add('d-none');
+        }
+        if(!menuAddBook.classList.contains('d-none')) {
+            menuAddBook.classList.add('d-none');
+        }
+        if(!menuPurchases.classList.contains('d-none')) {
+            menuPurchases.classList.remove('d-none');
+        }
+        if(!menuAddAuthor.classList.contains('d-none')) {
+            menuAddAuthor.classList.add('d-none');
+        }
+        if(!menuProfile.classList.contains('d-none')) {
+            menuProfile.classList.remove('d-none');
+        }
+        if(!menuAdminPanel.classList.contains('d-none')) {
+            menuAdminPanel.classList.add('d-none');
+        }
+        if(!menuAdminPanel.classList.contains('d-none')) {
+            menuAdminPanel.classList.add('d-none');
+        }
+        if(!menuAdminPanel.classList.contains('d-none')) {
+            menuAdminPanel.classList.add('d-none');
+        }        
+    }
+    if(role === 'MANAGER'){
+        
+        return;
+    }
+    if(role === 'ADMINISTRATOR'){
+        
+        return;
+    }
+}

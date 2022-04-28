@@ -22,6 +22,7 @@ const menuAddBook = document.getElementById("menu_add_book");
 menuAddBook.addEventListener('click', e=>{
     e.preventDefault();
     activeBtnMenu(menuAddBook);
+    viewModule.showNewBookForm();
 });
 const menuPurchases = document.getElementById("menu_purchases");
 menuPurchases.addEventListener('click', e => {
@@ -116,7 +117,7 @@ function deactiveMenu(activeMenuBtn){
 }
 
 function checkMenu() {
-    const role = null;
+    let role = null;
     if(sessionStorage.getItem('role') === null){
         if(!menuAddAuthor.classList.contains('d-none')){
             menuAddAuthor.classList.add("d-none");
@@ -141,8 +142,8 @@ function checkMenu() {
         }
         return;
     }
-    role = sessionStorage.getItem('role');
-    if(role === 'USER'){
+    role = JSON.parse(sessionStorage.getItem('role'));
+    if(role.roleName === 'USER'){
         if(!menuAddAuthor.classList.contains('d-none')){
             menuAddAuthor.classList.add("d-none");
         }
@@ -166,7 +167,7 @@ function checkMenu() {
         }
         return;
     }
-    if(role === 'MANAGER'){
+    if(role.roleName === 'MANAGER'){
         if(menuAddAuthor.classList.contains('d-none')){
             menuAddAuthor.classList.remove("d-none");
         }
@@ -190,7 +191,7 @@ function checkMenu() {
         }
         return;
     }
-    if(role === 'ADMINISTRATOR'){
+    if(role.roleName === 'ADMINISTRATOR'){
         if(menuAddAuthor.classList.contains('d-none')){
             menuAddAuthor.classList.remove("d-none");
         }

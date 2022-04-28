@@ -24,8 +24,8 @@ class LoginModule {
                .then(response => {// обрабатываем object полученый из обещания
                     document.getElementById('info').innerHTML = response.info;
                     if(response.auth){
-                        sessionStorage.setItem('user',response.user);
-                        sessionStorage.setItem('role',response.role);
+                        sessionStorage.setItem('user',JSON.stringify(response.user));
+                        sessionStorage.setItem('role',JSON.stringify(response.role));
                         checkMenu();
                         document.getElementById('content').innerHTML = "";
                     }

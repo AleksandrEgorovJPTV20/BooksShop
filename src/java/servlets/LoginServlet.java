@@ -122,11 +122,12 @@ public class LoginServlet extends HttpServlet {
                     }
                     break;
                 }
-                Role role = userRolesFacade.getRoleForUser(authUser);
+                String roleName = userRolesFacade.getRoleForUser(authUser);
+                Role role = roleFacade.getRoleByName(roleName);
                 session = request.getSession(true);
                 session.setAttribute("authUser", authUser);
                 job.add("info", "Вы вошли как "+authUser.getLogin())
-                   .add("auth",true);
+                   .add("auth",true)
                    .add("user", new UserJsonBuilder().getUserJsonObject(authUser))
                    .add("role", new RoleJsonBuilder().getRoleJsonObject(role));
                 try (PrintWriter out = response.getWriter()) {

@@ -11,10 +11,10 @@ import javax.json.JsonObjectBuilder;
 
 
 public class BookJsonBuilder {
-    public JsonArray getBooksJsonArray(List<Book> listBook){
+    public JsonArray getBooksJsonArray(List<Book> listBooks){
         JsonArrayBuilder jab = Json.createArrayBuilder();
-        for(int i = 0; i<listBook.size();i++){
-            jab.add(getBookJsonObject(listBook.get(i)));
+        for(int i = 0; i<listBooks.size();i++){
+            jab.add(getBookJsonObject(listBooks.get(i)));
         }
         return jab.build();
     }

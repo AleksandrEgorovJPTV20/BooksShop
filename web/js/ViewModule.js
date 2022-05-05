@@ -58,6 +58,7 @@ class ViewModule {
                 </div>
             </div>
         </div>`;
+        
         document.getElementById("btn_add_author").addEventListener('click', (e)=>{
             e.preventDefault();
             authorModule.createNewAuthor();
@@ -76,7 +77,7 @@ class ViewModule {
             document.getElementById('btn_update_author').classList.remove('d-none');
             document.getElementById('titlePageAuthor').innerHTML = 'Редактирование данных автора';
         });
-        authorModule.insertListAuthors();
+        authorModule.insertListAuthors(true);
     };
    showNewBookForm(){
         const content = document.getElementById('content');
@@ -89,9 +90,10 @@ class ViewModule {
                 <input type="hidden" id="book_id">
                 <input type="text" class="form-control" id="bookName" placeholder="Название">
               </div>
-              <div class="form-group">
-                <label for="select_authors" class="form-label mt-4">Авторы</label>
-                <select type="text" class="form-control" id="select_authors"></select>
+              <div class="form-group mt-2">
+                <label for="select_authors" class=" col-form-label mt-2">Список авторов</label>
+                <select multiple row="5" class="col-sm-10 form-select form-control-plaintext" id="select_authors">
+                </select>
               </div>
               <div class="form-group">
                 <label for="publishedYear" class="form-label mt-4">Год издания</label>
@@ -118,10 +120,6 @@ class ViewModule {
             e.preventDefault();
             bookModule.createNewBook();
         });
-        document.getElementById("select_authors").addEventListener('change', (e)=>{
-            e.preventDefault();
-            authorModule.insertListAuthors();
-        });
         document.getElementById("btn_update_book").addEventListener('click', (e)=>{
             e.preventDefault();
             //bookModule.updateBook();
@@ -136,8 +134,10 @@ class ViewModule {
             document.getElementById('btn_update_book').classList.remove('d-none');
             document.getElementById('titlePageBook').innerHTML = 'Редактирование данных книги';
         });
+        authorModule.insertListAuthors(false);
         bookModule.insertListBooks();
     };
+
 }
 
 const viewModule = new ViewModule();

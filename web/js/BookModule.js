@@ -3,7 +3,7 @@ class BookModule {
     createNewBook(){
         const bookName = document.getElementById('bookName').value;
         const publishedYear = document.getElementById('publishedYear').value;
-        const selectAuthors = document.getElementById('select_author').value;
+        const selectAuthors = document.getElementById('select_author').selectedOptions;
         const quantity = document.getElementById('quantity').value;
         const newBook = {
             "bookName": bookName,

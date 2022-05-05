@@ -155,8 +155,9 @@ public class ManagerServlet extends HttpServlet {
                 newBook.setBookName(bookName);
                 newBook.setPublishedYear(Integer.parseInt(publishedYear));
                 List<Author> authors = new ArrayList<>();
-                for(int i = 0; i < selectAuthors.size();i++){
-                    authors.add(authorFacade.find(selectAuthors.getString(i)));
+                for(int i=0; i< selectAuthors.size();i++){
+                    String jsonAuthorId = selectAuthors.getString(i);
+                    authors.add(authorFacade.find(Long.parseLong(jsonAuthorId)));
                 }
                 newBook.setAuthor(authors);
                 newBook.setQuantity(Integer.parseInt(quantity));
@@ -172,8 +173,8 @@ public class ManagerServlet extends HttpServlet {
                 List<Book> listBooks = bookFacade.findAll();
                 BookJsonBuilder bjb = new BookJsonBuilder();
                 job.add("status",true);
-                job.add("info","Создан массив книгы");
-                job.add("authors",bjb.getBooksJsonArray(listBooks));
+                job.add("info","Создан массив книг");
+                job.add("books",bjb.getBooksJsonArray(listBooks));
                 try (PrintWriter out = response.getWriter()) {
                     out.println(job.build().toString());
                 }
@@ -192,6 +193,42 @@ public class ManagerServlet extends HttpServlet {
                 }
                 break;
             case "/updateBook":
+                jsonReader = Json.createReader(request.getReader());
+                jsonObject = jsonReader.readObject();
+                bookId = jsonObject.getString("bookId","");
+                bookName = jsonObject.getString("bookName","");
+                publishedYear = jsonObject.getString("publishedYear","");
+                selectAuthors = jsonObject.getJsonArray("selectAuthors");
+                quantity = jsonObject.getString("quantity","");
+                if("".equals(bookName) || "".equals(quantity) || "".equals(publishedYear) || selectAuthors.isEmpty()){
+                    job.add("info","Заполните все поля")
+                        .add("status",false)
+                        .add("bookName",bookName)
+                        .add("publishedYear",publishedYear)
+                        .add("selectAuthors",selectAuthors)
+                        .add("quantity",quantity);
+                    try (PrintWriter out = response.getWriter()){
+                       out.println(job.build().toString()); 
+                    }
+                    break;
+                }
+                Book updateBook = bookFacade.find(Long.parseLong(bookId));
+                updateBook.setBookName(bookName);
+                updateBook.setPublishedYear(Integer.parseInt(publishedYear));
+                authors = new ArrayList<>();
+                for(int i=0; i< selectAuthors.size();i++){
+                    String jsonAuthorId = selectAuthors.getString(i);
+                    authors.add(authorFacade.find(Long.parseLong(jsonAuthorId)));
+                }
+                updateBook.setAuthor(authors);
+                updateBook.setQuantity(Integer.parseInt(quantity));
+                updateBook.setCount(updateBook.getQuantity());
+                bookFacade.edit(updateBook);
+                job.add("info", "Книга изменена!")
+                    .add("status",true);
+                try (PrintWriter out = response.getWriter()) {
+                    out.println(job.build().toString());
+                }
                 break;
         }
     }

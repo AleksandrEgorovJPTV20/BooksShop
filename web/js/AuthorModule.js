@@ -101,7 +101,7 @@ class AuthorModule{
         const firstname = document.getElementById("firstname").value;
         const lastname = document.getElementById("lastname").value;
         const birthYear = document.getElementById("birth_year").value;
-        const updateUser = {
+        const updateAuthor = {
             "authorId": authorId,
             "firstname": firstname,
             "lastname": lastname,
@@ -112,7 +112,7 @@ class AuthorModule{
             headers: {
                 'Content-Type': 'application/json;charset:utf8'
             },
-            body: JSON.stringify(updateUser)
+            body: JSON.stringify(updateAuthor)
         });
         promiseAuthor
                 .then(response => response.json())

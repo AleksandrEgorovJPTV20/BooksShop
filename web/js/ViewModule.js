@@ -88,7 +88,7 @@ class ViewModule {
               <div class="form-group">
                 <label for="bookName" class="form-label mt-4">Название книги</label>
                 <input type="hidden" id="book_id">
-                <input type="text" class="form-control" id="bookName" placeholder="Название">
+                <input type="text" class="form-control" id="book_name" placeholder="Название">
               </div>
               <div class="form-group mt-2">
                 <label for="select_authors" class=" col-form-label mt-2">Список авторов</label>
@@ -97,7 +97,7 @@ class ViewModule {
               </div>
               <div class="form-group">
                 <label for="publishedYear" class="form-label mt-4">Год издания</label>
-                <input type="text" class="form-control" id="publishedYear" placeholder="Год">
+                <input type="text" class="form-control" id="published_year" placeholder="Год">
               </div>
               <div class="form-group">
                 <label for="quantity" class="form-label mt-4">Количество экземпляров</label>
@@ -110,8 +110,8 @@ class ViewModule {
         <div class="card border-secondary mb-3 mx-auto" style="max-width: 40rem;">
             <div class="card-body d-flex justify-content-center">
                 <div class="w-100 form-group">
-                    <label for="select_books" class="form-label mt-2">Список Книг</label>
-                    <select class="form-select" id="select_books">
+                    <label for="list_books" class="form-label mt-2">Список Книг</label>
+                    <select class="form-select" id="list_books">
                     </select>
                 </div>
             </div>
@@ -122,20 +122,20 @@ class ViewModule {
         });
         document.getElementById("btn_update_book").addEventListener('click', (e)=>{
             e.preventDefault();
-            //bookModule.updateBook();
+            bookModule.updateBook();
             document.getElementById('btn_add_book').classList.remove('d-none');
             document.getElementById('btn_update_book').classList.add('d-none');
             document.getElementById('titlePageBook').innerHTML = 'Книга изменена';
         });
-        document.getElementById("select_books").addEventListener('change', (e)=>{
+        document.getElementById("list_books").addEventListener('change', (e)=>{
             e.preventDefault();
-            //bookModule.editBook();
+            bookModule.editBook();
             document.getElementById('btn_add_book').classList.add('d-none');
             document.getElementById('btn_update_book').classList.remove('d-none');
             document.getElementById('titlePageBook').innerHTML = 'Редактирование данных книги';
         });
         authorModule.insertListAuthors(false);
-        bookModule.insertListBooks();
+        bookModule.insertBookOptions(true);
     };
 
 }

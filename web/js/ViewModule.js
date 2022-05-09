@@ -82,54 +82,60 @@ class ViewModule {
    showNewBookForm(){
         const content = document.getElementById('content');
         content.innerHTML = `
-        <div class="card border-secondary mb-3 mx-auto" style="max-width: 30rem;">
-            <h3 id="titlePageBook" class="card-header w-100 text-center ">Добавление книги</h3>
-            <div class="card-body">
-              <div class="form-group">
-                <label for="bookName" class="form-label mt-4">Название книги</label>
-                <input type="hidden" id="book_id">
-                <input type="text" class="form-control" id="book_name" placeholder="Название">
-              </div>
-              <div class="form-group mt-2">
-                <label for="select_authors" class=" col-form-label mt-2">Список авторов</label>
-                <select multiple row="5" class="col-sm-10 form-select form-control-plaintext" id="select_authors">
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="publishedYear" class="form-label mt-4">Год издания</label>
-                <input type="text" class="form-control" id="published_year" placeholder="Год">
-              </div>
-              <div class="form-group">
-                <label for="quantity" class="form-label mt-4">Количество экземпляров</label>
-                <input type="text" class="form-control" id="quantity" placeholder="Экземпляры">
-              </div>
-              <button id='btn_add_book' type="submit" class="w-50 btn btn-primary my-3 d-flex justify-content-center mx-auto">Добавить книгу</button>
-              <button id='btn_update_book' type="submit" class="w-50 btn btn-primary my-3 d-flex justify-content-center mx-auto d-none">Изменить книгу</button>
-            </div>
-        </div>
-        <div class="card border-secondary mb-3 mx-auto" style="max-width: 40rem;">
-            <div class="card-body d-flex justify-content-center">
-                <div class="w-100 form-group">
-                    <label for="list_books" class="form-label mt-2">Список Книг</label>
-                    <select class="form-select" id="list_books">
+        <form id="newBookForm">
+            <div class="card border-secondary mb-3 mx-auto" style="max-width: 30rem;">
+                <h3 id="titlePageBook" class="card-header w-100 text-center ">Добавление книги</h3>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="bookName" class="form-label mt-4">Название книги</label>
+                    <input type="hidden" id="book_id">
+                    <input type="text" class="form-control" id="book_name" placeholder="Название" name="bookName">
+                  </div>
+                  <div class="form-group mt-2">
+                    <label for="select_authors" class=" col-form-label mt-2">Список авторов</label>
+                    <select multiple row="5" class="col-sm-10 form-select form-control-plaintext" id="select_authors" name="selectAuthors">
                     </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="publishedYear" class="form-label mt-4">Год издания</label>
+                    <input type="text" class="form-control" id="published_year" placeholder="Год" name="publishedYear">
+                  </div>
+                  <div class="form-group">
+                    <label for="price" class="form-label mt-4">Цена</label>
+                    <input type="text" class="form-control" id="price" name="price" placeholder="Цена">
+                  </div>
+                  <div class="form-group">
+                    <label for="cover" class="form-label mt-4">Обложка</label>
+                    <input type="file" class="form-control" id="cover" name="cover" placeholder="Обложка">
+                  </div>
+                  <button id='btn_add_book' type="submit" class="w-50 btn btn-primary my-3 d-flex justify-content-center mx-auto">Добавить книгу</button>
+                  <button id='btn_update_book' type="submit" class="w-50 btn btn-primary my-3 d-flex justify-content-center mx-auto d-none">Изменить книгу</button>
                 </div>
             </div>
-        </div>`;
-        document.getElementById("btn_add_book").addEventListener('click', (e)=>{
+            <div class="card border-secondary mb-3 mx-auto" style="max-width: 40rem;">
+                <div class="card-body d-flex justify-content-center">
+                    <div class="w-100 form-group">
+                        <label for="list_books" class="form-label mt-2">Список Книг</label>
+                        <select class="form-select" id="list_books">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </form>`;
+        document.getElementById("newBookForm").addEventListener('submit', (e)=>{
             e.preventDefault();
             bookModule.createNewBook();
         });
         document.getElementById("btn_update_book").addEventListener('click', (e)=>{
             e.preventDefault();
-            bookModule.updateBook();
+            //bookModule.updateBook();
             document.getElementById('btn_add_book').classList.remove('d-none');
             document.getElementById('btn_update_book').classList.add('d-none');
             document.getElementById('titlePageBook').innerHTML = 'Книга изменена';
         });
         document.getElementById("list_books").addEventListener('change', (e)=>{
             e.preventDefault();
-            bookModule.editBook();
+            //bookModule.editBook();
             document.getElementById('btn_add_book').classList.add('d-none');
             document.getElementById('btn_update_book').classList.remove('d-none');
             document.getElementById('titlePageBook').innerHTML = 'Редактирование данных книги';

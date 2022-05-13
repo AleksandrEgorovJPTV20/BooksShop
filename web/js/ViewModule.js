@@ -108,6 +108,11 @@ class ViewModule {
                     <label for="cover" class="form-label mt-4">Обложка</label>
                     <input type="file" class="form-control" id="cover" name="cover" placeholder="Обложка">
                   </div>
+                  <div class="form-group mb-4">
+                    <label for="list_covers" class=" col-form-label mt-2">Список загруженных обложек</label>
+                    <select class="col-sm-10 form-select form-control-plaintext" id="list_covers" name="coverFileName">
+                    </select>
+                  </div>
                   <button id='btn_add_book' type="submit" class="w-50 btn btn-primary my-3 d-flex justify-content-center mx-auto">Добавить книгу</button>
                   <button id='btn_update_book' type="submit" class="w-50 btn btn-primary my-3 d-flex justify-content-center mx-auto d-none">Изменить книгу</button>
                 </div>
@@ -122,6 +127,7 @@ class ViewModule {
                 </div>
             </div>
         </form>`;
+        bookModule.insertListCovers();
         document.getElementById("newBookForm").addEventListener('submit', (e)=>{
             e.preventDefault();
             bookModule.createNewBook();
@@ -135,7 +141,7 @@ class ViewModule {
         });
         document.getElementById("list_books").addEventListener('change', (e)=>{
             e.preventDefault();
-            //bookModule.editBook();
+            bookModule.editBook();
             document.getElementById('btn_add_book').classList.add('d-none');
             document.getElementById('btn_update_book').classList.remove('d-none');
             document.getElementById('titlePageBook').innerHTML = 'Редактирование данных книги';

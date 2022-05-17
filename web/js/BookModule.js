@@ -1,4 +1,6 @@
 import {viewModule} from './ViewModule.js';
+import {authorModule} from './AuthorModule.js';
+
 class BookModule {
     createNewBook(){
         const formData = new FormData(document.getElementById('newBookForm'));
@@ -56,27 +58,36 @@ class BookModule {
                 });
     }
     editBook(){
-        const bookId = document.getElementById('list_books').value;
-        const object = {
-            "bookId":bookId
-        };
-        const promiseAuthor = fetch('getBook',{
+        const editBookId = document.getElementById('list_covers').value;
+        const promiseEditBook = fetch('getEditBook',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset:utf8'
             },
-            body: JSON.stringify(object)
+            credentials: 'include',
+            body: JSON.stringify({"editBookId":editBookId})
         });
-        promiseAuthor
+        promiseEditBook
                 .then(response => response.json())
                 .then(response =>{
                    if(response.status){
-                       document.getElementById('info').value = response.info;
-                       document.getElementById('book_id').value = response.book.id
-                       document.getElementById('book_name').value = response.book.bookName;
-                       document.getElementById('published_year').value = response.book.publishedYear;
-                       document.getElementById('select_authors').value = response.book.author;
-                       document.getElementById('price').value = response.book.price;
+                       document.getElementById('book_name').value = response.editBook.bookName;
+                       document.getElementById('published_year').value = response.editBook.publishedYear;
+                       document.getElementById('price').value = response.editBook.price;
+                       authorModule.insertListAuthors(false);
+                       const selectAuthors = document.getElementById('select_authors');
+                       for (let i=0; selectAuthors.options.length; i++){
+                           for(j=0; j < response.editBook.author.length; j++){
+                               selectAuthors.options[j].selected;
+                           }
+                       }
+                       insertListCovers();
+                       const selectListCovers = document.getElementById('list_covers');
+                       for(let i = 0; i < selectListCovers.options.length; i++){
+                           if(selectListCovers.options[i].value === response.editBook.cover){
+                               selectListCovers.options[i].selected;
+                           }
+                       }
                    }else{
                        document.getElementById('info').value = response.info;
                    }
@@ -134,7 +145,7 @@ class BookModule {
                         const select = document.getElementById('list_covers');
                         select.options.length=0;
                         let option = document.createElement('option');
-                        option.text = "Выберите книгу";
+                        option.text = "Выберите обложку";
                         option.value = '';
                         select.add(option);
                         for(let i=0; i<response.covers.length; i++){

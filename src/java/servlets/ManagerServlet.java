@@ -54,7 +54,7 @@ import tools.PasswordProtected;
     "/updateAuthor",
     "/createNewBook",
     "/getListBooks",
-    "/getBook",
+    "/getEditBook",
     "/updateBook",
     "/getListCovers",
 })
@@ -193,21 +193,21 @@ public class ManagerServlet extends HttpServlet {
                     out.println(job.build().toString());
                 }
                 break;
-            case "/getBook":
+            case "/getEditBook":
                 jsonReader = Json.createReader(request.getReader());
                 jsonObject = jsonReader.readObject();
-                String bookId = jsonObject.getString("bookId","");
-                Book book = bookFacade.find(Long.parseLong(bookId));
+                String editBookId = jsonObject.getString("editBookId","");
+                Book editBook = bookFacade.find(Long.parseLong(editBookId));
                 bjb = new BookJsonBuilder();
-                job.add("info", "Редактируем книгу: "+book.getBookName());
+                job.add("info", "Редактируем книгу: "+editBook.getBookName());
                 job.add("status", true);
-                job.add("book", bjb.getBookJsonObject(book));
+                job.add("editBook", bjb.getBookJsonObject(editBook));
                 try (PrintWriter out = response.getWriter()) {
                     out.println(job.build().toString());
                 }
                 break;
             case "/updateBook":
-                bookId = request.getParameter("bookId");
+                editBookId = request.getParameter("bookId");
                 bookName = request.getParameter("bookName");
                 publishedYear = request.getParameter("publishedYear");
                 selectAuthors = request.getParameterValues("selectAuthors");
@@ -223,7 +223,7 @@ public class ManagerServlet extends HttpServlet {
                     }
                     break;
                 }
-                Book updateBook = bookFacade.find(Long.parseLong(bookId));
+                Book updateBook = bookFacade.find(Long.parseLong(editBookId));
                 updateBook.setBookName(bookName);
                 updateBook.setPublishedYear(Integer.parseInt(publishedYear));
                 authors = new ArrayList<>();

@@ -88,8 +88,7 @@ class ViewModule {
                 <div class="card-body">
                   <div class="form-group">
                     <label for="bookName" class="form-label mt-4">Название книги</label>
-                    <input type="hidden" id="book_id">
-                    <input type="text" class="form-control" id="book_name" placeholder="Название" name="bookName">
+                    <input type="text" class="form-control" id="book_name" placeholder="Название" name="bookName" >
                   </div>
                   <div class="form-group mt-2">
                     <label for="select_authors" class=" col-form-label mt-2">Список авторов</label>

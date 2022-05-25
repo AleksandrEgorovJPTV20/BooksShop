@@ -77,8 +77,11 @@ class BookModule {
                         authorModule.insertListAuthors(false);
                         const selectAuthors = document.getElementById('select_authors');
                         for (let i=0; selectAuthors.options.length; i++){
-                            for(j=0; j < response.editBook.author.length; j++){
-                                selectAuthors.options[j].selected;
+                            const n = response.editBook.author.length;
+                            for(j=0; j < n; j++){
+                                if(selectAuthors.options[i].value === response.editBook.author[j]){
+                                    selectAuthors.options[j].selected;
+                                }
                             }
                         }
                         insertListCovers();

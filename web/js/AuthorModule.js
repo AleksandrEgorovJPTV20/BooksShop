@@ -14,6 +14,7 @@ class AuthorModule{
             headers: {
                 'Content-Type': 'application/json;charset:utf8'
             },
+            credentials: 'include',
             body: JSON.stringify(newAuthor) 
         });
         promise.then(response => response.json())
@@ -29,43 +30,60 @@ class AuthorModule{
                    }
                 })
                 .catch(error=>{
-                    document.getElementById('info').innerHTML = 'Ошибка сервера: '+error;
+                    document.getElementById('info').innerHTML = 'Ошибка сервера createNewAuthor: '+error;
                 });
                         
     }
-    insertListAuthors(combobox){
+    insertListAuthors(combobox, book){
         const promiseListAuthors = fetch('getListAuthors',{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json;charset:utf8'
-            }
+            },
+            credentials: 'include'
         });
         promiseListAuthors
-                .then(response => response.json())
-                .then(response =>{
-                    if(response.status){
-                        const select = document.getElementById('select_authors');
+                .then(responseListAuthors => responseListAuthors.json())
+                .then(responseListAuthors =>{
+                    if(responseListAuthors.status){
+                        let select = document.getElementById('select_authors');
                         select.options.length=0;
                         let option = null;
                         if(combobox){
                             option = document.createElement('option');
-                            option.text = "Выберите автора";
-                            option.value = '';
-                            select.add(option);                            
+                                option.text = "Выберите автора";
+                                option.value = '';
+                                select.add(option);
                         }
-                        for(let i=0; i<response.authors.length; i++){
-                            option = document.createElement('option');
-                            option.text = response.authors[i].firstname+' '+response.authors[i].lastname;
-                            option.value = response.authors[i].id;
-                            select.add(option);
+                        if(book !== undefined){
+                            authorModule.selectBookList(book);
                         }
                     }else{
                        document.getElementById('info').innerHTML = response.info;  
                     }
                 })
                 .catch(error=>{
-                    document.getElementById('info').innerHTML = 'Ошибка сервера: '+error;
+                    document.getElementById('info').innerHTML = 'Ошибка сервера insertListAuthors: '+error;
                 });
+    }
+    selectBookList(book){
+        let select = document.getElementById('select_authors');
+        let options = select.options;
+        let bookAuthors = [];
+        for (let i = 0; i < book.author.length; i++) {
+            bookAuthors[i]=book.author[i];
+        }
+        let authorsId = [];
+        for (let i = 0;i < this.select.options.length; i++) {
+            this.authorsId[i] = this.select.aptions[i].value;
+        }
+        for (let i = 0; i < this.select.options.length; i++) {
+            for (let j = 0; j < this.bookAuthors.length; j++) {
+                console.log('authorsId[i]='+this.select.options[i]);
+                console.log('bookAuthors[j]='+this.bookAuthors[j]);
+            }
+        }
+        
     }
     editAuthor(){
         const authorId = document.getElementById('select_authors').value;
@@ -77,6 +95,7 @@ class AuthorModule{
             headers: {
                 'Content-Type': 'application/json;charset:utf8'
             },
+            credentials: 'include',
             body: JSON.stringify(object)
         });
         promiseAuthor
@@ -112,6 +131,7 @@ class AuthorModule{
             headers: {
                 'Content-Type': 'application/json;charset:utf8'
             },
+            credentials: 'include',
             body: JSON.stringify(updateAuthor)
         });
         promiseAuthor
